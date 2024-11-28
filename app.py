@@ -12,7 +12,7 @@ from streamlit_option_menu import option_menu
 st.set_page_config(layout="centered", page_title="Análise do Preço do Petróleo")
 
 #Carregando dados
-dados = pd.read_excel("C:/Users/Lucas/Documents/Base_Tech.xlsx", parse_dates=["data"])
+dados = pd.read_excel("Base_Tech.xlsx", parse_dates=["data"])
 dados.rename(columns={"data": "ds", "preco": "y"}, inplace=True)
 dados["ds"] = pd.to_datetime(dados["ds"])
 dados["ano"] = dados["ds"].dt.year
@@ -20,7 +20,7 @@ dados["media"] = dados.groupby("ano")["y"].transform("mean").round(2)
 dados["y"] = dados["y"].round(2)
 dados.sort_values(by="ds", ascending=True, inplace=True)
 
-dados_dv = pd.read_excel("C:/Users/Lucas/Documents/Base_Dv.xlsx", parse_dates=["ds"])
+dados_dv = pd.read_excel("Base_Dv.xlsx", parse_dates=["ds"])
 dados_dv.sort_values(by="ds", ascending=True, inplace=True)
 
 dados_dv_ano = dados_dv.copy()
