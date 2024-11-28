@@ -214,7 +214,7 @@ if selected == "Paineis Interativos":
         model.fit(df_1)
 
         # Previsão do Modelo - cria 10 dias futuros
-        future_p = model.make_future_dataframe(periods=120, freq='D')  # Frequência diária (10 dias de previsão)
+        future_p = model.make_future_dataframe(periods=60, freq='D')  # Frequência diária (10 dias de previsão)
         forecast_p = model.predict(future_p)
 
         # Dividir os dados em históricos e futuros
