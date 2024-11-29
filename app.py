@@ -285,15 +285,15 @@ if selected == "Paineis Interativos":
 
     # Seção: Desenvolvimento
     if submenu == "Derivados":
-        st.title("Derivados  do Brasil")
+        st.title("Derivadosl")
         st.markdown("""
-        Produtos Derivados de Petróleo no Brasil
+        ### **Produtos Derivados de Petróleo no Brasil** <br>
         Baseado na “Série Histórica de Preços de Combustíveis e de GLP” disponível no site da ANP 
         Agência Nacional do Petróleo, Gás Natural e Biocombustíveis, que acompanha através de pesquisa semanal
         os preços praticados por revendedores de combustíveis automotivos e de gás liquefeito de petróleo envasilhado em botijões,
-        buscamos os dados detalhados por cada revendedor em cada cidade de todos os estados, e aplicamos uma média diária de preço de venda por produto.
+        buscamos os dados detalhados por cada revendedor em cada cidade de todos os estados, e aplicamos uma média diária de preço de venda por produto. <br><br>
         Os resultados estão representados nos gráficos abaixo.
-        """)
+        """, unsafe_allow_html=True)
 
         # Inicializar valores padrão no session_state
         if "data_inicio_ano" not in st.session_state:
