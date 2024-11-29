@@ -39,7 +39,7 @@ dados_dv_ano = dados_dv_ano.groupby(["ano"]).mean()
 if "data_inicio" not in st.session_state:
     st.session_state.data_inicio = date(2018, 1, 1)
 if "data_fim" not in st.session_state:
-    st.session_state.data_fim = date(2023, 12, 31)
+    st.session_state.data_fim = date(2024, 10, 31)
 
 
 # Menu lateral
@@ -261,6 +261,11 @@ if selected == "Paineis Interativos":
             (future_forecast["ds"] <= pd.to_datetime(data_ref))
         ]
 
+        grid = grafico[['ds','yhat']]
+        grid['ds'] = pd.to_datetime(grid['ds'], format='%d/%m/%Y')
+        grid.rename(columns={'yhat': 'Valor Predito'}, inplace=True)
+        grid = grid.set_index('ds')
+
         # Gráfico com cores distintas
         grafico_1 = go.Figure()
 
@@ -272,11 +277,23 @@ if selected == "Paineis Interativos":
         ))
 
         st.plotly_chart(grafico_1)
-        
+
+
+        st.table(grid)
+
+
+
     # Seção: Desenvolvimento
     if submenu == "Derivados":
-        st.title("Derivados")
-        st.write("Produtos Derivados do Petróleo.")
+        st.title("Derivados  do Brasil")
+        st.markdown("""
+        Produtos Derivados de Petróleo no Brasil
+        Baseado na “Série Histórica de Preços de Combustíveis e de GLP” disponível no site da ANP 
+        Agência Nacional do Petróleo, Gás Natural e Biocombustíveis, que acompanha através de pesquisa semanal
+        os preços praticados por revendedores de combustíveis automotivos e de gás liquefeito de petróleo envasilhado em botijões,
+        buscamos os dados detalhados por cada revendedor em cada cidade de todos os estados, e aplicamos uma média diária de preço de venda por produto.
+        Os resultados estão representados nos gráficos abaixo.
+        """)
 
         # Inicializar valores padrão no session_state
         if "data_inicio_ano" not in st.session_state:
