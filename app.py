@@ -285,7 +285,7 @@ if selected == "Paineis Interativos":
 
     # Seção: Desenvolvimento
     if submenu == "Derivados":
-        st.title("Derivadosl")
+        st.title("Derivados")
         st.markdown("""
         ### **Produtos Derivados de Petróleo no Brasil** <br>
         Baseado na “Série Histórica de Preços de Combustíveis e de GLP” disponível no site da ANP 
