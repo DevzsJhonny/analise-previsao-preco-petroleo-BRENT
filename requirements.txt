@@ -6,7 +6,4 @@ prophet
 streamlit-option-menu
 datetime
 openpyxl
-sklearn
-sklearn.metrics 
-mean_squared_error
-mean_absolute_error
+scikit-learn
