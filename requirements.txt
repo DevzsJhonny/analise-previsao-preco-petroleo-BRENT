@@ -6,3 +6,4 @@ prophet
 streamlit-option-menu
 datetime
 openpyxl
+sklearn
