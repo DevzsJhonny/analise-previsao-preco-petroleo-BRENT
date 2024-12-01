@@ -1,9 +1,10 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import numpy as np
 
+from sklearn.metrics import mean_squared_error, mean_absolute_error
 from prophet import Prophet
 from datetime import date
 from streamlit_option_menu import option_menu
@@ -107,6 +108,7 @@ if selected == "Introdução":
     
     """, unsafe_allow_html=True)
 
+    st.image("petroleo.jpg", caption="Navio Petrolifero", use_column_width=True)
 
 # Seção: Desenvolvimento
 if selected == "Desenvolvimento":
@@ -134,15 +136,33 @@ if selected == "Desenvolvimento":
     
     st.markdown("""
 
-    Sobre o seguinte gráfico e análise e acompanhamento do fechamento do valor do petróleo, podemos tirar as seguintes conclusões:
-    A pandemia de COVID-19, iniciada em meados de 2020, impactou fortemente nos preços. 
-    O preço estava entre 70,25 dólares no início do mês de janeiro e atingiu o menor valor que ocorreu em 21 de Abril de 2020 com preço em  9,12 dólares
-    
-    """)
+                Alguns fos fatores que acabam afetando o preço do petróleo são: <br>
+                - **Conflitos Geopoliticos, sanções, crescimento economico global e sazonalidades** <br>
+                Muitos dos principais países produtores de petróleo estão em áreas politicamente instáveis, como a Venezuela e o Irã. 
+                Esse tipo de incerteza impacta diretamente a cotação do petróleo, especialmente quando os governos desses países tomam ações inesperadas envolvendo a política global.
+
+                - **Catástrofes ambientais** <br>
+                Catastrofes como furacões em paises que são produtores de petróleo também impacta negativamente ao preço do petróleo.
+                Por exemplo os furaçõesvno Golfo do México, essas catastrofes ambientais fazem com que seja necessário interromper à 
+                extração do petróleo e gás natural (que também é uma fonte de combustível)A região é responsável por uma grande parte da 
+                produção de petróleo e gás natural dos Estados Unidos, com centenas de plataformas de perfuração operando lá.
+                
+
+                - **Guerras**<br>
+                Sobre os fatores de guerra, podemos citar a guerra da Ucrânia e Russia. Iniciada em 02/2022.
+                A Rússia é um dos maiores produtores de petróleo do mundo, sempre estando entre os 3 maiores do mundo estando atrás dos Estados Unidos e Arábia Saldita.
+                Já a Ucrânia não produz tanto petróleo, estando por volta de 50 a 70 mil barris por dia.
+                A produção de petróleo na Ucrânia é muito pequena em comparação com a Rússia, que continua a ser uma potência energética global.
+                No entanto, a Ucrânia desempenha um papel importante no transporte de energia, o que afeta os fluxos de petróleo e gás entre a Rússia e a Europa.
 
 
+                - **Pandemias** <br>
+                A pandemia de COVID-19, iniciada em meados de 2020, impactou fortemente nos preços. 
+                O preço estava entre 70,25 dólares no início do mês de janeiro e atingiu o menor valor que ocorreu em 21 de Abril de 2020 com preço em  9,12 dólares.
+                
+    """, unsafe_allow_html=True)
 
-# Seção: Paineis
+    # Seção: Paineis
 if selected == "Paineis Interativos":
     if submenu == "Apresentação Geral":
         st.title("Visualização dos Dados")
@@ -201,39 +221,56 @@ if selected == "Paineis Interativos":
     if submenu == "Previsão de Dados":
         st.title("Previsão dos Dados")
 
+        st.write("""
+        Aqui é o local em que apresentaremos previsões utilizando o modelo PROPHET. <br>
+        Apresentamos toda a base de dados no primeiro gráfico, que é de 01/2018 até 10/2024.
+        Iniciamos a previsão em 01/11/24 e conseguimos prever os valores (com certa margem de erro) até 03/26.
+
+        É valido citar que, as previsões são realizadas apenas para os dias úteis.
+        """, unsafe_allow_html=True)
+
         # Gráfico histórico de preços
         fig = px.line(dados, x="ds", y="y", title="Histórico do Preço do Petróleo")
         fig.update_layout(xaxis_title="Data de Referência", yaxis_title="Preço (em US$)", template="plotly_white")
         st.plotly_chart(fig)
 
         # Remover colunas desnecessárias (como 'ano' e 'media', se existirem)
-        df_1 = dados.copy().drop(columns=["ano", "media"], errors='ignore')
-        
-        # Treinamento do Modelo Prophet
-        model = Prophet()
-        model.fit(df_1)
+        df_1 = dados[['ds','y']]
 
-        # Previsão do Modelo - cria 10 dias futuros
-        future_p = model.make_future_dataframe(periods=120, freq='B')  # Frequência diária (10 dias de previsão)
-        forecast_p = model.predict(future_p)
+        # Funções de Avaliação
+        def calculate_metrics(y_true, y_pred):
+            mae = mean_absolute_error(y_true, y_pred)
+            mse = mean_squared_error(y_true, y_pred)
+            mape = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
+            return mae, mse, mape
 
-        # Dividir os dados em históricos e futuros
-        historical_forecast = forecast_p[forecast_p['ds'] <= df_1['ds'].max()]
-        future_forecast = forecast_p[forecast_p['ds'] > df_1['ds'].max()]
+        # Função para mostras as métricas
+        def print_metrics(metrics):
+            mae, mse, mape = metrics
+            st.write(f"**MAE (Mean Absolute Error)**: {mae:.2f}")
+            st.write(f"**MSE (Mean Squared Error)**: {mse:.2f}")
+            st.write(f"**MAPE (Mean Absolute Percentage Error)**: {mape:.2f}%")
+
+        tamanho = int(len(df_1)* 0.8)
+        treino = df_1[:tamanho] #o treino é "tudo até a data de corte, menos a data de corte"
+        teste = df_1[tamanho:] #o teste ficou "tudo a partir da data de corte, contando com ela"
+
+        modelo = Prophet()
+        modelo.add_seasonality(name='mensal', period=30, fourier_order=8)
+        modelo.fit(df_1)
+
+        futuro = modelo.make_future_dataframe(periods = 362, freq='B')
+        forecast = modelo.predict(futuro)
+
+        forecast_teste = forecast[forecast['ds'] > df_1['ds'].max()]
 
         # Gráfico com cores distintas
         fig_colored = go.Figure()
 
-        # Dados históricos
-        fig_colored.add_trace(go.Scatter(
-            x=historical_forecast['ds'], y=historical_forecast['yhat'], 
-            mode='lines', name='Histórico', 
-            line=dict(color='blue')
-        ))
 
         # Dados de previsão
         fig_colored.add_trace(go.Scatter(
-            x=future_forecast['ds'], y=future_forecast['yhat'], 
+            x=forecast_teste['ds'], y=forecast_teste['yhat'], 
             mode='lines', name='Previsão', 
             line=dict(color='orange')
         ))
@@ -246,24 +283,21 @@ if selected == "Paineis Interativos":
             template="plotly_white"
         )
 
+        st.write("Abaixo é possível escolher até qual data quer que seja realizada a previsão.")
         # Intervalo de datas
         st.write("### Selecione uma data:")
 
-        data_ref = st.date_input("Intervalo de datas")
+        data_ref = st.date_input("Intervalo a partir da primeira previsão de dados a partir de 01/11/24")
 
-        # Filtrar os dados com base no intervalo
-        prev = future_forecast[
-            future_forecast["ds"] == pd.to_datetime(data_ref)
-        ]
-
-        grafico = future_forecast[
-            (future_forecast["ds"] >= pd.to_datetime('01/11/2024')) &
-            (future_forecast["ds"] <= pd.to_datetime(data_ref))
+        grafico = forecast_teste[
+            (forecast_teste["ds"] >= pd.to_datetime('01/11/2024')) &
+            (forecast_teste["ds"] <= pd.to_datetime(data_ref))
         ]
 
         grid = grafico[['ds','yhat']]
         grid['ds'] = pd.to_datetime(grid['ds'], format='%d/%m/%Y')
         grid.rename(columns={'yhat': 'Valor Predito'}, inplace=True)
+        
         grid = grid.set_index('ds')
 
         # Gráfico com cores distintas
@@ -278,10 +312,16 @@ if selected == "Paineis Interativos":
 
         st.plotly_chart(grafico_1)
 
+        st.markdown("<center><br><br><h3>Métricas para avaliação do modelo </h3> </center> <br>", unsafe_allow_html=True)
 
+        prophet_m = calculate_metrics(teste['y'], forecast_teste['yhat'].values)
+        print_metrics(prophet_m)
+
+        st.markdown("<center><br><br><h3>Tabela para exportação dos dados Preditos </h3> </center> <br>", unsafe_allow_html=True)
+        
         st.table(grid)
 
-
+        
 
     # Seção: Desenvolvimento
     if submenu == "Derivados":
@@ -299,7 +339,7 @@ if selected == "Paineis Interativos":
         if "data_inicio_ano" not in st.session_state:
             st.session_state.data_inicio_ano = date(2019, 1, 1)
         if "data_fim_ano" not in st.session_state:
-            st.session_state.data_fim_ano = date(2024, 12, 31)
+            st.session_state.data_fim_ano = date(2024, 10, 31)
 
         
 
@@ -380,5 +420,3 @@ if selected == "Paineis Interativos":
 # Seção: Referências
 if selected == "Referências":
     st.write('Teste')
-
-   
