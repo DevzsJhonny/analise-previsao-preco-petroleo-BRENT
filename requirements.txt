@@ -7,4 +7,4 @@ streamlit-option-menu
 datetime
 openpyxl
 sklearn
-sklearn.metrics
+from sklearn.metrics import mean_squared_error, mean_absolute_error
