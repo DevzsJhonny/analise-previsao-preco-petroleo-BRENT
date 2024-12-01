@@ -108,7 +108,7 @@ if selected == "Introdução":
     
     """, unsafe_allow_html=True)
 
-    st.image("petroleo.jpg", caption="Navio Petrolifero", use_column_width=True)
+    st.image("petroleo.jpg", caption="Navio Plataforma", use_column_width=True)
 
 # Seção: Desenvolvimento
 if selected == "Desenvolvimento":
