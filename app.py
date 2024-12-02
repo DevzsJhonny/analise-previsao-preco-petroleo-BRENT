@@ -142,24 +142,36 @@ if selected == "Desenvolvimento":
     fig = px.line(dados, x="ds", y="y", title="Histórico do Preço do Petróleo")
     fig.update_layout(xaxis_title="Data de Referência", yaxis_title="Preço (em US$)", template="plotly_white")
     st.plotly_chart(fig)
-    
+
     st.markdown("""
-
-                Alguns dos fatores que afetaram o preço do petróleo nos últimos anos: <br>
-                - *Conflitos Geopolíticos, sanções, crescimento econômico global e sazonalidades* <br>
-                Muitos dos principais países produtores de petróleo estão em áreas politicamente instáveis, como a Venezuela e o Irã, e isso pode impactar a cotação do petróleo, principalmente quando os governos desses países tomam ações inesperadas envolvendo a política global.<br>
-
-                - *Catástrofes ambientais* <br>
-                Catástrofes como furacões em países que são produtores de petróleo também impactam negativamente o preço do petróleo. Por exemplo os furações no Golfo do México, algumas dessas catástrofes ambientais fazem com que seja necessário interromper as extrações de petróleo e gás natural (que também é uma fonte de combustível). A região é responsável por uma grande parte da produção de petróleo e gás natural dos Estados Unidos, com centenas de plataformas de perfuração operando lá.<br>
-
-                - *Guerras*<br>
-                A guerra entre Ucrânia e Rússia, iniciada em 02/2022 já impactou bastante na variação de preços do petróleo. A produção de petróleo na Ucrânia é muito pequena em comparação com a Rússia, que continua a ser uma potência energética global, mas embora a produção da Ucrânia esteja por volta de 50 a 70 mil barris por dia, ela desempenha um papel importante no transporte de energia, o que afeta os fluxos de petróleo e gás entre a Rússia e a Europa. Já a Rússia é um dos três maiores produtores de petróleo do mundo, ficando atrás apenas dos Estados Unidos e da Arábia Saudita.<br>
-
+                 Alguns dos fatores que afetaram o preço do petróleo nos últimos anos: <br>
                 - *Pandemias* <br>
                 A pandemia de COVID-19, iniciada em meados de 2020, impactou fortemente nos preços do petróleo, principalmente no início deste período. O preço estava entre 70,25 dólares no início do mês de janeiro deste ano e atingiu o menor valor de 2020 em 21 de abril com preço em 9,12 dólares.<br>
-                
     """, unsafe_allow_html=True)
 
+    st.image("covid19.jpeg", caption="Navio Plataforma", use_column_width=True)
+
+    st.markdown("""
+                - *Guerras*<br>
+                A guerra entre Ucrânia e Rússia, iniciada em 02/2022 já impactou bastante na variação de preços do petróleo. A produção de petróleo na Ucrânia é muito pequena em comparação com a Rússia, que continua a ser uma potência energética global, mas embora a produção da Ucrânia esteja por volta de 50 a 70 mil barris por dia, ela desempenha um papel importante no transporte de energia, o que afeta os fluxos de petróleo e gás entre a Rússia e a Europa. Já a Rússia é um dos três maiores produtores de petróleo do mundo, ficando atrás apenas dos Estados Unidos e da Arábia Saudita.<br>
+    """, unsafe_allow_html=True)
+
+    st.image("guerra_russia_ucrania.jpeg", caption="Navio Plataforma", use_column_width=True)
+
+    st.markdown("""
+                - *Conflitos Geopolíticos, sanções, crescimento econômico global e sazonalidades* <br>
+                Muitos dos principais países produtores de petróleo estão em áreas politicamente instáveis, como a Venezuela e o Irã, e isso pode impactar a cotação do petróleo, principalmente quando os governos desses países tomam ações inesperadas envolvendo a política global.<br>
+    """, unsafe_allow_html=True)
+    
+    st.image("ataque_ira_israel.jpeg", caption="Navio Plataforma", use_column_width=True)
+
+    st.markdown("""
+                - *Catástrofes ambientais* <br>
+                Catástrofes como furacões em países que são produtores de petróleo também impactam negativamente o preço do petróleo. Por exemplo os furações no Golfo do México, algumas dessas catástrofes ambientais fazem com que seja necessário interromper as extrações de petróleo e gás natural (que também é uma fonte de combustível). A região é responsável por uma grande parte da produção de petróleo e gás natural dos Estados Unidos, com centenas de plataformas de perfuração operando lá.<br>
+    """, unsafe_allow_html=True)
+
+    st.image("temporada_furacoes.jpeg", caption="Navio Plataforma", use_column_width=True)
+    
     # Garantindo que dados_s seja uma série temporal válida
     dados_s = dados.set_index('ds')['y']  # Agora 'dados_s' é uma série temporal com 'ds' como índice e 'y' como valores
 
