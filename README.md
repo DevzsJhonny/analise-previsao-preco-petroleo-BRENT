@@ -15,13 +15,14 @@ Integrante do time de dados:<br><br>
 
 
 <b>Objetivos</b>
+<br><br>
 ● Criar um dashboard interativo e um storytelling que traga insights (pelo
 menos 4) sobre a variação do preço do petróleo, como situações
-geopolíticas, crises, demanda global etc.
+geopolíticas, crises, demanda global etc.<br><br>
 ● Criar um modelo de Machine Learning que faça a previsão do preço do
-petróleo diariamente (utilizando time series).
+petróleo diariamente (utilizando time series).<br><br>
 ● Criar um plano para fazer o deploy em produção do modelo e entregar um
-MVP do projeto funcionando em produção, através do Streamlit.
+MVP do projeto funcionando em produção, através do Streamlit.<br><br>
 
 <h1>Documentos Importantes:</h1><br><br>
 arquivo .pdf trata-se da entrega do documento final aos stakeholders, contendo o link do aplicativo web, com gráficos e dashboards interativas e modelo preditivo do preço diário do petróleo Brent;<br><br>
