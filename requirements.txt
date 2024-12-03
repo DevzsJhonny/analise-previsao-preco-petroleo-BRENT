@@ -6,3 +6,6 @@ prophet
 streamlit-option-menu
 datetime
 openpyxl
+scikit-learn
+xlsxwriter
+statsmodels
